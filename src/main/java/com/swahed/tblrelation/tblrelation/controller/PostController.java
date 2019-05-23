@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @RestController
@@ -28,5 +29,11 @@ public class PostController {
     PostModel createPost(@Valid @RequestBody PostModel model){
         System.out.println(model.toString());
         return postRepo.save(model);
+    }
+
+    @DeleteMapping("/post/{postId}")
+    String deletePost(@PathVariable Long postId){
+        postRepo.deleteById(postId);
+        return String.format(Locale.getDefault(),"Deleted post with id: %d", postId);
     }
 }

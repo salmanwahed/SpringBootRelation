@@ -14,7 +14,11 @@ public class PostModel {
 
     private String title;
 
-    private String description;
+    private String summary;
+
+    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private PostDetailModel postDetail;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -30,6 +34,25 @@ public class PostModel {
         this.comments = comments;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public PostDetailModel getPostDetail() {
+        return postDetail;
+    }
+
+    public void setPostDetail(PostDetailModel postDetail) {
+        if (postDetail == null){
+            if (this.postDetail != null){
+                this.postDetail.setPost(null);
+            }
+        }else {
+            postDetail.setPost(this);
+        }
+        this.postDetail = postDetail;
+    }
+
     public Set<CommentModel> getComments() {
         return comments;
     }
@@ -42,12 +65,12 @@ public class PostModel {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getSummary() {
+        return summary;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     @Override
@@ -58,17 +81,34 @@ public class PostModel {
                 strComment.append(commentModel.toString());
                 strComment.append(" ");
             }
-            return "PostModel{" +
-                    "id=" + id +
-                    ", title='" + title + '\'' +
-                    ", description='" + description + '\'' +
-                    ", comments=" + strComment +
-                    '}';
+            if (postDetail != null)
+                return "PostModel{" +
+                        "id=" + id +
+                        ", title='" + title + '\'' +
+                        ", summary='" + summary + '\'' +
+                        ", postDetail='" + postDetail.toString() + '\'' +
+                        ", comments=" + strComment +
+                        '}';
+            else
+                return "PostModel{" +
+                        "id=" + id +
+                        ", title='" + title + '\'' +
+                        ", summary='" + summary + '\'' +
+                        ", comments=" + strComment +
+                        '}';
         }else {
-            return "PostModel{" +
+            if (postDetail != null)
+                return "PostModel{" +
+                        "id=" + id +
+                        ", title='" + title + '\'' +
+                        ", summary='" + summary + '\'' +
+                        ", postDetail='" + postDetail.toString() + '\'' +
+                        '}';
+            else
+                return "PostModel{" +
                     "id=" + id +
                     ", title='" + title + '\'' +
-                    ", description='" + description;
+                    ", summary='" + summary;
         }
     }
 }

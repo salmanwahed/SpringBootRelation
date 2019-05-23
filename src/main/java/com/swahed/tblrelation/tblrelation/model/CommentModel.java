@@ -3,6 +3,7 @@ package com.swahed.tblrelation.tblrelation.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "comment")
@@ -11,6 +12,7 @@ public class CommentModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String comment;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,6 +26,10 @@ public class CommentModel {
                 "id=" + id +
                 ", comment='" + comment + '\'' +
                 '}';
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getComment() {
