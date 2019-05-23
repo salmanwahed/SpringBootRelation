@@ -26,7 +26,13 @@ public class CommentController {
 
     @PostMapping("/{postId}/comment")
     CommentModel createComment(@PathVariable Long postId, @Valid @RequestBody CommentModel comment){
-        return commentRepo.save(comment);
+        Optional<PostModel> optional = postRepo.findById(postId);
+        if (optional.isPresent()){
+            comment.setPost(optional.get());
+            return commentRepo.save(comment);
+        }else {
+            return null;
+        }
     }
 
     @GetMapping("/{postId}/comment/{commentId}")

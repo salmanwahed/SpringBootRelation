@@ -1,11 +1,10 @@
 package com.swahed.tblrelation.tblrelation.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name = "post")
 public class PostModel {
@@ -17,32 +16,22 @@ public class PostModel {
 
     private String description;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<CommentModel> comments;
 
-    @Override
-    public String toString() {
-        StringBuilder strComment = new StringBuilder();
-        for (CommentModel commentModel: comments){
-            strComment.append(commentModel.toString());
-            strComment.append(" ");
+
+    public void setComments(Set<CommentModel> comments) {
+        if (comments != null){
+            for (CommentModel comment: comments){
+                comment.setPost(this);
+            }
         }
-
-        return "PostModel{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", comments=" + strComment +
-                '}';
-    }
-
-    public PostModel() {
-    }
-
-    public PostModel(String title, String description, Set<CommentModel> comments) {
-        this.title = title;
-        this.description = description;
         this.comments = comments;
+    }
+
+    public Set<CommentModel> getComments() {
+        return comments;
     }
 
     public String getTitle() {
@@ -61,11 +50,25 @@ public class PostModel {
         this.description = description;
     }
 
-    public Set<CommentModel> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<CommentModel> comments) {
-        this.comments = comments;
+    @Override
+    public String toString() {
+        if (comments != null){
+            StringBuilder strComment = new StringBuilder();
+            for (CommentModel commentModel: comments){
+                strComment.append(commentModel.toString());
+                strComment.append(" ");
+            }
+            return "PostModel{" +
+                    "id=" + id +
+                    ", title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    ", comments=" + strComment +
+                    '}';
+        }else {
+            return "PostModel{" +
+                    "id=" + id +
+                    ", title='" + title + '\'' +
+                    ", description='" + description;
+        }
     }
 }

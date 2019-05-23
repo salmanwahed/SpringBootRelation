@@ -1,10 +1,9 @@
 package com.swahed.tblrelation.tblrelation.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 @Table(name = "comment")
 public class CommentModel {
@@ -16,6 +15,7 @@ public class CommentModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
+    @JsonBackReference
     private PostModel post;
 
     @Override

@@ -1,6 +1,5 @@
 package com.swahed.tblrelation.tblrelation.controller;
 
-import com.swahed.tblrelation.tblrelation.dao.CommentRepository;
 import com.swahed.tblrelation.tblrelation.dao.PostRepository;
 import com.swahed.tblrelation.tblrelation.model.PostModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,6 @@ public class PostController {
     @Autowired
     PostRepository postRepo;
 
-    @Autowired
-    CommentRepository commentRepo;
-
     @GetMapping("/posts")
     List<PostModel> getAllPosts(){
         return (List<PostModel>) postRepo.findAll();
@@ -31,14 +27,6 @@ public class PostController {
     @PostMapping("/post")
     PostModel createPost(@Valid @RequestBody PostModel model){
         System.out.println(model.toString());
-//        Set<CommentModel> commentModelSet = new HashSet<>();
-//        for (CommentModel comment: model.getComments()){
-//            comment.setPost(postModel);
-//            commentModelSet.add(commentRepo.save(comment));
-//        }
-//        postModel.setComments(commentModelSet);
-        PostModel postModel =  postRepo.save(model);
-        System.out.println("@@Printing saved post: " + postModel);
-        return postModel;
+        return postRepo.save(model);
     }
 }

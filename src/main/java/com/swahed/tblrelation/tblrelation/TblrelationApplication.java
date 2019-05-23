@@ -10,9 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TblrelationApplication{
 
-	@Autowired
-	PostRepository postRepository;
-
 	public static void main(String[] args) {
 		SpringApplication.run(TblrelationApplication.class, args);
 
